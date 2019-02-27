@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Workshop.App.Entities;
 
 namespace Workshop.App.Pages
@@ -14,5 +16,11 @@ namespace Workshop.App.Pages
         {
             _context = context;
         }
+
+        public async Task OnGetAsync()
+        {
+            BlogEntries = await _context.Blogs.Include(blog => blog.Posts).ToArrayAsync();
+        }
+
     }
 }
