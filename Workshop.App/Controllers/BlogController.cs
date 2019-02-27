@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Workshop.App.Models;
 using Workshop.App.Repositories;
 
 namespace Workshop.App.Controllers
@@ -19,6 +22,8 @@ namespace Workshop.App.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Blog>), (int)HttpStatusCode.OK)]
+        [Produces("application/json")]
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation("Get all blog entries");

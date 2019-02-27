@@ -1,0 +1,72 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.ApiExplorer
+
+@inject IApiDescriptionGroupCollectionProvider ApiDescription
+
+@{
+    int i = 0;
+}
+
+@foreach (var group in ApiDescription.ApiDescriptionGroups.Items)
+{
+    <div class="row">
+        <div class="col">
+            <h1>@group.GroupName</h1>
+
+            @foreach (var api in group.Items)
+            {
+                var sectionName = $"section{i++}";
+
+                <div class="card mt-2 border-dark">
+                    <div class="card-header">
+                        <h2>
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#@sectionName">@api.HttpMethod @api.RelativePath</button>
+                        </h2>
+                    </div>
+                    <div id="@sectionName" class="collapse">
+                        <div class="card-body">
+
+                            @if (api.ParameterDescriptions.Count > 0)
+                            {
+                                <section>
+                                    <h3>Parameters</h3>
+                                    <ul class="list-group">
+                                        @foreach (var parameter in api.ParameterDescriptions)
+                                        {
+                                            <li class="list-group-item">
+                                                <h4>Name: @parameter.Name, (@parameter.Source.Id)</h4>
+                                                <div>Type: @parameter.Type?.FullName</div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </section>
+                            }
+
+                            @if (api.SupportedResponseTypes.Count > 0)
+                            {
+                                <section>
+                                    <h3>Response Types</h3>
+                                    <ul class="list-group">
+                                        @foreach (var response in api.SupportedResponseTypes)
+                                        {
+                                            var metadata = response.ModelMetadata;
+
+                                            <li class="list-group-item">
+                                                <div>Status Code: @response.StatusCode</div>
+                                                @if (metadata != null)
+                                                {
+                                                    <div>Response Type: @(metadata.IsCollectionType ? metadata.ElementType.FullName + "[]" : metadata.UnderlyingOrModelType.FullName)</div>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>
+                                </section>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+}

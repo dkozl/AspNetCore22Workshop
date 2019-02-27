@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
 using Workshop.App.Entities;
 using Workshop.App.Middleware;
 using Workshop.App.Repositories;
@@ -57,6 +58,8 @@ namespace Workshop.App
 
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider("c:\\temp"));
 
+            services.AddSwaggerGen(options => options.SwaggerDoc("v1", new Info()));
+
             services.AddMvc();
 
             var container = new ContainerBuilder();
@@ -72,6 +75,9 @@ namespace Workshop.App
             app.Map("/workshop", builder => builder.Run(ctx => ctx.Response.WriteAsync("middleware 2")));
 
             app.UseHealthChecks("/healthcheck", new HealthCheckOptions {Predicate = hc => hc.Tags.Contains("db")});
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Workshop API"));
 
             app.UseMvc();
         }
