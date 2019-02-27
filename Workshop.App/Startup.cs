@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Workshop.App.Entities;
+using Workshop.App.Middleware;
 
 namespace Workshop.App
 {
@@ -24,6 +25,9 @@ namespace Workshop.App
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseMiddleware<WorkshopMiddleware>();
+            app.Map("/workshop", builder => builder.Run(ctx => ctx.Response.WriteAsync("middleware 2")));
+
             app.Run(ctx => ctx.Response.WriteAsync("Hello World!"));
         }
     }

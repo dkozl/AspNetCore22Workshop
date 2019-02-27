@@ -14,6 +14,10 @@ namespace Workshop.App.Middleware
 
         public async Task Invoke(HttpContext context)
         {
+            if (context.Request.Path.StartsWithSegments("/middleware"))
+            {
+                await context.Response.WriteAsync("Middleware 1");
+            }
             await _next(context);
         }
     }
