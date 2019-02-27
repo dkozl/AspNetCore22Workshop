@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 using Workshop.App.Entities;
 using Workshop.App.Middleware;
 using Workshop.App.Repositories;
@@ -52,6 +54,8 @@ namespace Workshop.App
 
             services.Configure<BlogSettings>(_configuration.GetSection("BlogSettings"));
             services.Configure<BlogSettings>(settings => settings.Properties.Add("NewProperty", "some value"));
+
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider("c:\\temp"));
 
             services.AddMvc();
 
