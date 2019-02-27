@@ -1,5 +1,9 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
+using Autofac;
+using Autofac.Core;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +27,7 @@ namespace Workshop.App
             _configuration = configuration;
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IBlogContext, BlogContext>(builder => builder.UseSqlServer(_configuration.GetConnectionString("BlogDatabase")));
             services.AddHealthChecks().AddAsyncCheck(
@@ -49,9 +53,13 @@ namespace Workshop.App
             services.Configure<BlogSettings>(_configuration.GetSection("BlogSettings"));
             services.Configure<BlogSettings>(settings => settings.Properties.Add("NewProperty", "some value"));
 
-            services.AddTransient<IBlogRepository, BlogRepository>();
-
             services.AddMvc();
+
+            var container = new ContainerBuilder();
+            container.Populate(services);
+            container.RegisterType<BlogRepository>().As<IBlogRepository>();
+
+            return new AutofacServiceProvider(container.Build());
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
