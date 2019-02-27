@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Workshop.App.Entities;
 using Workshop.App.Middleware;
+using Workshop.App.Repositories;
 
 namespace Workshop.App
 {
@@ -47,6 +48,10 @@ namespace Workshop.App
 
             services.Configure<BlogSettings>(_configuration.GetSection("BlogSettings"));
             services.Configure<BlogSettings>(settings => settings.Properties.Add("NewProperty", "some value"));
+
+            services.AddTransient<IBlogRepository, BlogRepository>();
+
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -56,7 +61,7 @@ namespace Workshop.App
 
             app.UseHealthChecks("/healthcheck", new HealthCheckOptions {Predicate = hc => hc.Tags.Contains("db")});
 
-            app.Run(ctx => ctx.Response.WriteAsync("Hello World!"));
+            app.UseMvc();
         }
     }
 }
