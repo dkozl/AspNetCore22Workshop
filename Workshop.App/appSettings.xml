@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <BlogSettings>
+    <BlogType>Games</BlogType>
+    <Properties>
+      <Prop4>value4</Prop4>
+    </Properties>
+  </BlogSettings>
+</configuration>

@@ -1,0 +1,10 @@
+﻿@model Workshop.App.Entities.Blog
+<h2>@Model.Name</h2>
+<h3>@Model.Description</h3>
+@foreach (var post in Model.Posts)
+{
+    <div class="card">
+        <h4 class="card-header">@post.Title</h4>
+        <div class="card-body">@post.Content</div>
+    </div>
+}
