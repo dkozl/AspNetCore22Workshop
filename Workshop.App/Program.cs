@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using NLog.Web;
 
 namespace Workshop.App
 {
@@ -14,6 +15,7 @@ namespace Workshop.App
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(builder => builder.AddXmlFile("appSettings.xml"))
+                .UseNLog()
                 .UseStartup<Startup>();
     }
 }
