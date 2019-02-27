@@ -44,6 +44,9 @@ namespace Workshop.App
                     }
                 },
                 new[] {"db"});
+
+            services.Configure<BlogSettings>(_configuration.GetSection("BlogSettings"));
+            services.Configure<BlogSettings>(settings => settings.Properties.Add("NewProperty", "some value"));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
