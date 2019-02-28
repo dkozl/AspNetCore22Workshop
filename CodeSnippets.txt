@@ -1,18 +1,15 @@
 async ct =>
 {
-   using (var connection = new SqlConnection(_configuration.GetConnectionString("BlogDatabase")))
-   {
-       await connection.OpenAsync(ct);
-       if (connection.State == ConnectionState.Open)
-       {
-           using (var command = new SqlCommand("select count(*) from Blogs", connection))
-           {
-               if ((int) await command.ExecuteScalarAsync(ct) > 0) return HealthCheckResult.Healthy();
-           }
-       }
+    using (var connection = new SqlConnection(_configuration.GetConnectionString("BlogDatabase")))
+    {
+        await connection.OpenAsync(ct);
+        using (var command = new SqlCommand("SELECT 1", connection))
+        {
+            await command.ExecuteScalarAsync(ct);
+        }
 
-       return HealthCheckResult.Unhealthy();
-   }
+        return HealthCheckResult.Healthy();
+    }
 }
 
 ---------
@@ -33,6 +30,15 @@ var containerBuilder = new ContainerBuilder();
 containerBuilder.Populate(services);
 containerBuilder.RegisterType<BlogRepository>().As<IBlogRepository>();
 return new AutofacServiceProvider(containerBuilder.Build());
+
+-- or ---
+
+.ConfigureServices(services => services.AddAutofac())
+
+public void ConfigureContainer(ContainerBuilder builder)
+{
+   builder.RegisterType<BlogRepository>().As<IBlogRepository>();
+}
 
 ---------
 

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Workshop.App
 {
@@ -6,6 +8,7 @@ namespace Workshop.App
     {
         public string Title { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public BlogType BlogType { get; set; }
 
         public IDictionary<string, string> Properties { get; set; }
