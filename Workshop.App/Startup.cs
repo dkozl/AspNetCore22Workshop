@@ -56,7 +56,7 @@ namespace Workshop.App
             services.Configure<BlogSettings>(_configuration.GetSection("BlogSettings"));
             services.Configure<BlogSettings>(settings => settings.Properties.Add("NewProperty", "some value"));
 
-            services.AddSingleton<IFileProvider>(new PhysicalFileProvider("c:\\temp"));
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider("/"));
 
             services.AddSwaggerGen(options => options.SwaggerDoc("v1", new Info()));
 
